@@ -541,16 +541,10 @@ declare class OrderedMap<K, +V> extends Map<K, V> {
   static <V>(obj?: {[key: string]: V}):OrderedMap<string, V>;
   static <K, V>(iterable?: ESIterable<[K,V]>):OrderedMap<K, V>;
 
-  static isMap(maybeMap: any): boolean;
-
   set<K_, V_>(key: K_, value: V_):OrderedMap<K|K_, V|V_>;
   delete(key: K): this;
   remove(key: K): this;
   clear(): this;
-
-  update<K_,V_>(updater: (value: this) =>OrderedMap<K_,V_>):OrderedMap<K_,V_>;
-  update<V_>(key: K, updater: (value: V) => V_):OrderedMap<K,V|V_>;
-  update<V_>(key: K, notSetValue: V_, updater: (value: V) => V_):OrderedMap<K,V|V_>;
 
   merge<K_,V_>(
     ...iterables: (ESIterable<[K_,V_]> | { [key: K_]: V_ })[]
@@ -646,7 +640,40 @@ declare class Set<T> extends SetCollection<T> {
 
 // OrderedSets have nothing that Sets do not have. We do not need to override constructor & other statics
 declare class OrderedSet<T> extends Set<T> {
+  static <T>(iterable?: ESIterable<T>): OrderedSet<T>;
   static isOrderedSet(maybeOrderedSet: any): bool;
+
+  static of<T>(...values: T[]): OrderedSet<T>;
+  static fromKeys<T>(iter: ESIterable<[T,any]>): OrderedSet<T>;
+  static fromKeys(iter: { [key: string]: any }): OrderedSet<string>;
+
+  add<U>(value: U): OrderedSet<T|U>;
+  delete(value: T): this;
+  remove(value: T): this;
+  clear(): this;
+  union<U>(...iterables: ESIterable<U>[]): OrderedSet<T|U>;
+  merge<U>(...iterables: ESIterable<U>[]): OrderedSet<T|U>;
+  intersect<U>(...iterables: ESIterable<U>[]): OrderedSet<T&U>;
+  subtract<U>(...iterables: ESIterable<U>[]): OrderedSet<T>;
+
+  withMutations(mutator: (mutable: this) => any): this;
+  asMutable(): this;
+  asImmutable(): this;
+
+  // Overrides that specialize return types
+
+  map<M>(
+    mapper: (value: T, value: T, iter: this) => M,
+    context?: any
+  ): OrderedSet<M>;
+
+  flatMap<M>(
+    mapper: (value: T, value: T, iter: this) => ESIterable<M>,
+    context?: any
+  ): OrderedSet<M>;
+
+  flatten(depth?: number): /*this*/OrderedSet<any>;
+  flatten(shallow?: boolean): /*this*/OrderedSet<any>;
 }
 
 declare class Stack<T> extends IndexedCollection<T> {
