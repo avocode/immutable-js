@@ -79,12 +79,12 @@ declare class _Iterable<K, V, KI, II, SI> {
   entrySeq(): IndexedSeq<[K,V]>;
 
   reverse(): this;
-  sort(comparator?: (valueA: V, valueB: V) => number): this;
 
+  sort(comparator?: (valueA: V, valueB: V) => number): _Iterable<K, V, KI, II, SI>;
   sortBy<C>(
     comparatorValueMapper: (value: V, key: K, iter: this) => C,
     comparator?: (valueA: C, valueB: C) => number
-  ): this;
+  ): _Iterable<K, V, KI, II, SI>;
 
   groupBy<G>(
     grouper: (value: V, key: K, iter: this) => G,
@@ -193,6 +193,12 @@ declare class KeyedIterable<K,V> extends Iterable<K,V> {
   @@iterator(): Iterator<[K,V]>;
   toSeq(): KeyedSeq<K,V>;
   flip(): /*this*/KeyedIterable<V,K>;
+
+  sort(comparator?: (valueA: V, valueB: V) => number): /*this*/KeyedIterable<K, V>;
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): /*this*/KeyedIterable<K, V>;
 
   mapKeys<K_>(
     mapper: (key: K, value: V, iter: this) => K_,
@@ -312,6 +318,12 @@ declare class IndexedIterable<T> extends Iterable<number,T> {
     context?: any
   ): number;
 
+  sort(comparator?: (valueA: T, valueB: T) => number): IndexedIterable<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: number, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): IndexedIterable<T>;
+
   concat(...iters: ESIterable<T>[]): this;
 
   map<U>(
@@ -333,6 +345,12 @@ declare class SetIterable<T> extends Iterable<T,T> {
 
   @@iterator(): Iterator<T>;
   toSeq(): SetSeq<T>;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): /*this*/SetIterable<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: T, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): /*this*/SetIterable<T>;
 
   concat(...iters: ESIterable<T>[]): this;
 
@@ -356,18 +374,42 @@ declare class SetIterable<T> extends Iterable<T,T> {
 
 declare class Collection<K,V> extends _Iterable<K,V, typeof KeyedCollection, typeof IndexedCollection, typeof SetCollection> {
   size: number;
+
+  sort(comparator?: (valueA: V, valueB: V) => number): Collection<K,V>;
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): Collection<K,V>;
 }
 
 declare class KeyedCollection<K,V> extends Collection<K,V> mixins KeyedIterable<K,V> {
   toSeq(): KeyedSeq<K,V>;
+
+  sort(comparator?: (valueA: V, valueB: V) => number): KeyedCollection<K,V>;
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): KeyedCollection<K,V>;
 }
 
 declare class IndexedCollection<T> extends Collection<number,T> mixins IndexedIterable<T> {
   toSeq(): IndexedSeq<T>;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): IndexedCollection<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: number, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): IndexedCollection<T>;
 }
 
 declare class SetCollection<T> extends Collection<T,T> mixins SetIterable<T> {
   toSeq(): SetSeq<T>;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): SetCollection<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: T, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): SetCollection<T>;
 }
 
 declare class Seq<K,V> extends _Iterable<K,V, typeof KeyedSeq, typeof IndexedSeq, typeof SetSeq> {
@@ -381,21 +423,45 @@ declare class Seq<K,V> extends _Iterable<K,V, typeof KeyedSeq, typeof IndexedSeq
   size: ?number;
   cacheResult(): this;
   toSeq(): this;
+
+  sort(comparator?: (valueA: V, valueB: V) => number): Seq<K, V>;
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): Seq<K, V>;
 }
 
 declare class KeyedSeq<K,V> extends Seq<K,V> mixins KeyedIterable<K,V> {
   static <K,V>(iter?: ESIterable<[K,V]>): KeyedSeq<K,V>;
   static <K,V>(iter?: { [key: K]: V }): KeyedSeq<K,V>;
+
+  sort(comparator?: (valueA: V, valueB: V) => number): KeyedSeq<K, V>;
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): KeyedSeq<K, V>;
 }
 
 declare class IndexedSeq<T> extends Seq<number,T> mixins IndexedIterable<T> {
   static <T>(iter?: ESIterable<T>): IndexedSeq<T>;
   static of<T>(...values: T[]): IndexedSeq<T>;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): IndexedSeq<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: number, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): IndexedSeq<T>;
 }
 
 declare class SetSeq<T> extends Seq<T,T> mixins SetIterable<T> {
   static <T>(iter?: ESIterable<T>): IndexedSeq<T>;
   static of<T>(...values: T[]): SetSeq<T>;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): SetSeq<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: T, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): SetSeq<T>;
 }
 
 declare class List<T> extends IndexedCollection<T> {
@@ -413,6 +479,12 @@ declare class List<T> extends IndexedCollection<T> {
   pop(): this;
   unshift<U>(...values: U[]): List<T|U>;
   shift(): this;
+
+  sort(comparator?: (valueA: T, valueB: T) => number): List<T>;
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: number, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): List<T>;
 
   update<U>(updater: (value: this) => List<U>): List<U>;
   update<U>(index: number, updater: (value: T) => U): List<T|U>;
@@ -511,6 +583,13 @@ declare class Map<K,V> extends KeyedCollection<K,V> {
   asImmutable(): this;
 
   // Overrides that specialize return types
+
+  sort(comparator?: (valueA: V, valueB: V) => number): OrderedMap<K, V>;
+
+  sortBy<C>(
+    comparatorValueMapper: (value: V, key: K, iter: this) => C,
+    comparator?: (valueA: C, valueB: C) => number
+  ): OrderedMap<K, V>;
 
   map<V_>(
     mapper: (value: V, key: K, iter: this) => V_,
@@ -626,6 +705,13 @@ declare class Set<T> extends SetCollection<T> {
   asImmutable(): this;
 
   // Overrides that specialize return types
+
+  sort(comparator?: (valueA: T, valueB: T) => number): OrderedSet<T>;
+
+  sortBy<C>(
+    comparatorValueMapper: (value: T, key: T, iter: this) => C,
+    comparator?: (valueA: T, valueB: T) => number
+  ): OrderedSet<T>;
 
   map<M>(
     mapper: (value: T, value: T, iter: this) => M,
