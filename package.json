@@ -1,6 +1,6 @@
 {
   "name": "immutable",
-  "version": "3.8.1",
+  "version": "3.8.1-ordered.flow.fix",
   "description": "Immutable Data Collections",
   "homepage": "https://facebook.github.com/immutable-js",
   "author": {
