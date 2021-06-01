@@ -1766,12 +1766,17 @@
     /**
      * The first value in the Iterable.
      */
-    first(): V;
+    first(): V | undefined;
+    first<NSV>(notSetValue: NSV): NSV;
 
     /**
-     * The last value in the Iterable.
+     * In case the `Collection` is not empty returns the last element of the
+     * `Collection`.
+     * In case the `Collection` is empty returns the optional default
+     * value if provided, if no default value is provided returns undefined.
      */
-    last(): V;
+    last(): V | undefined;
+    last<NSV>(notSetValue: NSV): NSV;
 
 
     // Reading deep values

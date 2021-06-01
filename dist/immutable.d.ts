@@ -3877,7 +3877,8 @@ declare module Immutable {
      * In case the `Collection` is empty returns the optional default
      * value if provided, if no default value is provided returns undefined.
      */
-    first<NSV>(notSetValue?: NSV): V | NSV;
+    first(): V | undefined;
+    first<NSV>(notSetValue: NSV): NSV;
 
     /**
      * In case the `Collection` is not empty returns the last element of the
@@ -3885,7 +3886,8 @@ declare module Immutable {
      * In case the `Collection` is empty returns the optional default
      * value if provided, if no default value is provided returns undefined.
      */
-    last<NSV>(notSetValue?: NSV): V | NSV;
+    last(): V | undefined;
+    last<NSV>(notSetValue: NSV): NSV;
 
     // Reading deep values
 
