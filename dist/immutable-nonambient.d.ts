@@ -1766,12 +1766,12 @@
     /**
      * The first value in the Iterable.
      */
-    first(): V;
+    first(): V | undefined;
 
     /**
      * The last value in the Iterable.
      */
-    last(): V;
+    last(): V | undefined;
 
 
     // Reading deep values
