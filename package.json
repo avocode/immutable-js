@@ -1,6 +1,6 @@
 {
   "name": "immutable",
-  "version": "3.8.2-first-last-typing-fix",
+  "version": "3.8.3-first-last-default-return",
   "description": "Immutable Data Collections",
   "homepage": "https://facebook.github.com/immutable-js",
   "author": {
